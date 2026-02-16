@@ -88,46 +88,69 @@ if st.button("🚀 Predict Price Range"):
     input_data = np.array([[battery_power, blue, clock_speed, dual_sim, fc,
                             four_g, int_memory, m_dep, mobile_wt, n_cores,
                             pc, px_height, px_width, ram, 
-                            10, 5,  # screen height & width default
+                            10, 5,
                             talk_time, three_g, touch_screen, wifi]])
 
-    input_data = scaler.transform(input_data)
-    prediction = model.predict(input_data)
+    input_scaled = scaler.transform(input_data)
+    prediction = model.predict(input_scaled)
+
+    # Optional confidence
+    try:
+        proba = model.predict_proba(input_scaled)
+        confidence = np.max(proba) * 100
+    except:
+        confidence = None
 
     price_dict = {
-        0: "💰 Low Cost",
-        1: "💵 Medium Cost",
-        2: "💎 High Cost",
-        3: "👑 Premium / Very High Cost"
+        0: "Low Cost",
+        1: "Medium Cost",
+        2: "High Cost",
+        3: "Premium / Very High Cost"
     }
 
-    st.success(f"### Predicted Price Range: {price_dict[prediction[0]]}")
+    predicted_label = price_dict[prediction[0]]
 
-st.markdown("---")
+    st.success(f"### Predicted Price Range: {predicted_label}")
 
-# Feature Importance Section
-if st.checkbox("📊 Show Top 5 Important Features"):
+    if confidence:
+        st.info(f"Prediction Confidence: {confidence:.2f}%")
 
-    importances = model.feature_importances_
-    features = ["battery_power", "blue", "clock_speed", "dual_sim", "fc",
-                "four_g", "int_memory", "m_dep", "mobile_wt", "n_cores",
-                "pc", "px_height", "px_width", "ram", "sc_h", "sc_w",
-                "talk_time", "three_g", "touch_screen", "wifi"]
+    # ----------------------------
+    # 📄 Generate Report
+    # ----------------------------
 
-    feature_importance = sorted(zip(features, importances),
-                                key=lambda x: x[1], reverse=True)[:5]
+    report = f"""
+    📱 MOBILE PRICE PREDICTION REPORT
+    -------------------------------------
 
-    names = [x[0] for x in feature_importance]
-    values = [x[1] for x in feature_importance]
+    🔋 Battery Power: {battery_power} mAh
+    🧠 RAM: {ram} MB
+    💾 Internal Memory: {int_memory} GB
+    ⚙ Cores: {n_cores}
+    📦 Weight: {mobile_wt} g
+    📷 Front Camera: {fc} MP
+    📸 Primary Camera: {pc} MP
+    🖥 Resolution: {px_height} x {px_width}
+    📡 5G Support: {"YES" if four_g else "NO"}
+    📡 4G Support: {"YES" if three_g else "NO"}
+    📶 WiFi: {"YES" if wifi else "NO"}
+    📲 Touch Screen: {"YES" if touch_screen else "NO"}
+    🔵 Bluetooth: {"YES" if blue else "NO"}
 
-    fig, ax = plt.subplots()
-    ax.barh(names, values)
-    ax.invert_yaxis()
-    ax.set_title("Top 5 Important Features")
-    st.pyplot(fig)
+    -------------------------------------
+    💰 Predicted Category: {predicted_label}
+    """
 
-st.markdown("---")
-st.subheader("📊 Model Insights")
+    if confidence:
+        report += f"\n📊 Confidence: {confidence:.2f}%"
+
+    # Download Button
+    st.download_button(
+        label="📥 Download Prediction Report",
+        data=report,
+        file_name="mobile_price_report.txt",
+        mime="text/plain"
+    )
 
 # Create 2 tabs instead of 2 checkboxes (cleaner UI)
 tab1, tab2 = st.tabs(["All Features", "Top 5 Features"])
