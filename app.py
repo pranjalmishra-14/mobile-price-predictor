@@ -65,20 +65,20 @@ with col2:
     four_g = st.selectbox("5G Support", ["NO","YES" ])
     four_g = 1 if four_g == "YES" else 0
     three_g = st.selectbox("4G Support", ["NO", "YES"])
-    four_g = 1 if four_g == "YES" else 0
+    three_g = 1 if three_g == "YES" else 0
     wifi = st.selectbox("WiFi Support", ["NO", "YES"])
-    four_g = 1 if four_g == "YES" else 0
+    wifi = 1 if wifi == "YES" else 0
     touch_screen = st.selectbox("Touch Screen", ["NO", "YES"])
-    four_g = 1 if four_g == "YES" else 0
+    touch_screen = 1 if touch_screen == "YES" else 0
     dual_sim = st.selectbox("Dual SIM", ["NO", "YES"])
-    four_g = 1 if four_g == "YES" else 0
+    dual_sim = 1 if dual_sim == "YES" else 0
 
     fc = st.slider("Front Camera (MP)", 0, 20, 5)
     pc = st.slider("Primary Camera (MP)", 0, 50, 12)
     clock_speed = st.slider("Clock Speed", 0.5, 3.0, 2.0)
     m_dep = st.slider("Mobile Depth", 0.1, 1.0, 0.5)
     blue = st.selectbox("Bluetooth", ["NO", "YES"])
-    four_g = 1 if four_g == "YES" else 0
+    blue = 1 if blue == "YES" else 0
 
 st.markdown("---")
 
