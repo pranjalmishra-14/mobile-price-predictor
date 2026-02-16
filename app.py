@@ -50,7 +50,7 @@ with col1:
     st.subheader("🔋 Hardware Specs")
 
     battery_power = st.slider("Battery Power", 500, 5000, 2000)
-    ram = st.slider("RAM (MB)", 1000, 8000, 200)
+    ram = st.slider("RAM (MB)", 1000, 8000, 4000)
     int_memory = st.slider("Internal Memory (GB)", 2, 256, 32)
     n_cores = st.slider("Number of Cores", 1, 8, 4)
     mobile_wt = st.slider("Mobile Weight (grams)", 80, 300, 150)
