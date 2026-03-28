@@ -85,14 +85,30 @@ st.markdown("---")
 # Prediction Button
 if st.button("🚀 Predict Price Range"):
 
+    sc_h = px_height
+    sc_w = px_width
+
     input_data = np.array([[battery_power, blue, clock_speed, dual_sim, fc,
                             four_g, int_memory, m_dep, mobile_wt, n_cores,
-                            pc, px_height, px_width, ram, 
-                            10, 5,
+                            pc, px_height, px_width, ram,
+                            sc_h, sc_w,
                             talk_time, three_g, touch_screen, wifi]])
 
     input_scaled = scaler.transform(input_data)
     prediction = model.predict(input_scaled)
+
+    st.write("Prediction Code:", prediction[0])  # Debug
+
+    price_dict = {
+        0: "₹5k–10k (Budget)",
+        1: "₹10k–25k (Mid Range)",
+        2: "₹25k–50k (High End)",
+        3: "₹50k+ (Premium)"
+    }
+
+    predicted_label = price_dict.get(prediction[0], "Unknown")
+
+    st.success(f"Predicted Price Range: {predicted_label}")
 
     # Optional confidence
     try:
